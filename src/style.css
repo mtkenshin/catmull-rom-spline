@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #f5f5f5;
+}
+
+#myCanvas {
+  width: 100%;
+  aspect-ratio: 9 /16;
+  resize:both;
+  overflow:auto;
+  background: blueviolet;
+
+  canvas {
+    background: black;
+    width: inherit;
+    aspect-ratio: inherit;
+  }
+}
