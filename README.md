@@ -113,3 +113,15 @@ animator.draw();
 - The class automatically resizes the canvas when the window resizes.
 - Uses quadratic Bézier curves for smooth transitions.
 - The animation progresses segment by segment.
+
+## Dependencies
+
+Requires an HTML `<canvas>` element inside a `<div>` container.
+
+Assumes the IPoint interface is defined as:
+``` typescript
+interface IPoint {
+    x: number;
+    y: number;
+}
+```

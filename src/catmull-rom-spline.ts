@@ -99,33 +99,33 @@ export class BezierCurveAnimator {
 
     private drawAnimatedCurve(): void {
         if (this.currentSegment >= this.points.length - 1) return;
-
+    
         let { cp1x, cp1y, cp2x, cp2y, x1, y1, x2, y2 } = this.getControlPoints(this.currentSegment);
-
+    
         this.ctx.beginPath();
-        this.ctx.stroke();
+        this.ctx.lineWidth = 2;
+        this.ctx.setLineDash([]);
         this.ctx.moveTo(x1, y1);
+        this.ctx.strokeStyle = "red";
         this.ctx.lineJoin = "round";
         this.ctx.lineCap = "round";
-        this.ctx.strokeStyle = "red";
-
-        for (let i = 0; i <= this.t * 100; i++) {
-            let progressT = i / 100;
+    
+        const resolution = 1000; // Increase the resolution for smoother curves
+        for (let i = 0; i <= this.t * resolution; i++) {
+            let progressT = i / resolution;
             let { x, y } = this.getPointOnBezierCurve(progressT, { x: x1, y: y1 }, { x: cp1x, y: cp1y }, { x: cp2x, y: cp2y }, { x: x2, y: y2 });
             this.ctx.lineTo(x, y);
         }
-
-        this.ctx.lineJoin = "round";
-        this.ctx.lineCap = "round";
+    
         this.ctx.stroke();
         this.t += 0.02;
-
+    
         if (this.t >= 1) {
             this.t = 0;
             this.drawnSegments.push({ cp1x, cp1y, cp2x, cp2y, x2, y2 });
             this.currentSegment++;
         }
-
+    
         requestAnimationFrame(() => this.drawAnimatedCurve());
     }
 
