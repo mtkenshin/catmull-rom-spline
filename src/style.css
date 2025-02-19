@@ -13,7 +13,8 @@ body {
   aspect-ratio: 9 /16;
   resize:both;
   overflow:auto;
-  
+  background: blueviolet;
+
   canvas {
     background: black;
     width: inherit;

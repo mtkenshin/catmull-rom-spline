@@ -32,18 +32,15 @@ export class BezierCurveAnimator {
 
     private resizeCanvas(): void {
         const { width, height } = this.canvasWrapper.getBoundingClientRect();
-        this.canvas.width = width;
-        this.canvas.height = height;
-        this.scaleX = width / this.canvas.width;
-        this.scaleY = height / this.canvas.height;
-
+        this.scaleX = (width / this.canvas.width);
+        this.scaleY = (height / this.canvas.height);
+        this.canvas.width *= this.scaleX;
+        this.canvas.height *= this.scaleY;
+        
         this.points.forEach(point => {
             point.x *= this.scaleX;
             point.y *= this.scaleY;
         });
-
-        console.table(this.points);
-
         this.draw();
     }
 
@@ -95,7 +92,7 @@ export class BezierCurveAnimator {
 
         this.points.forEach(point => {
             this.ctx.beginPath();
-            this.ctx.arc(point.x * this.scaleX, this.invertY(point.y * this.scaleY), 5, 0, Math.PI * 2);
+            this.ctx.arc(point.x, this.invertY(point.y), 5, 0, Math.PI * 2);
             this.ctx.fill();
         });
     }
@@ -106,17 +103,20 @@ export class BezierCurveAnimator {
         let { cp1x, cp1y, cp2x, cp2y, x1, y1, x2, y2 } = this.getControlPoints(this.currentSegment);
 
         this.ctx.beginPath();
-        this.ctx.lineWidth = 2;
-        this.ctx.setLineDash([10, 10]);
-        this.ctx.moveTo(x1 * this.scaleX, y1 * this.scaleY);
+        this.ctx.stroke();
+        this.ctx.moveTo(x1, y1);
+        this.ctx.lineJoin = "round";
+        this.ctx.lineCap = "round";
         this.ctx.strokeStyle = "red";
 
         for (let i = 0; i <= this.t * 100; i++) {
             let progressT = i / 100;
             let { x, y } = this.getPointOnBezierCurve(progressT, { x: x1, y: y1 }, { x: cp1x, y: cp1y }, { x: cp2x, y: cp2y }, { x: x2, y: y2 });
-            this.ctx.lineTo(x * this.scaleX, y * this.scaleY);
+            this.ctx.lineTo(x, y);
         }
 
+        this.ctx.lineJoin = "round";
+        this.ctx.lineCap = "round";
         this.ctx.stroke();
         this.t += 0.02;
 
@@ -130,7 +130,6 @@ export class BezierCurveAnimator {
     }
 
     public draw(): void {
-        this.resizeCanvas();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.drawAnimatedCurve();
         this.drawDots();
